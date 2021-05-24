@@ -1,0 +1,54 @@
+   12  ip link add wg0 type wireguard
+   13  ip add add 10.23.23.1/24 dev wg0
+   14  wg set wg0 private-key /etc/wireguard/private.key 
+   15  ip link set wg0 up
+   16  wg0
+   17  wg
+   18  ip link set wg0 down
+   19  wg set wg0 port 54321 private-key /etc/wireguard/private.key 
+   20  wg help
+   21  man wg
+   22  wg set port 54321 wg0 private-key /etc/wireguard/private.key 
+   23  wg set 54321 wg0 private-key /etc/wireguard/private.key 
+   24  man weg
+   25  man wg
+   26  wg listen-port 54321 wg0 private-key /etc/wireguard/private.key 
+   27  wg set listen-port 54321 wg0 private-key /etc/wireguard/private.key 
+   28  man wg
+   29  wg set wg0 listen-port 54321 private-key /etc/wireguard/private.key 
+   30  ip link set wg0 down
+   31  ip link set wg0 up
+   36  wg set wg0 peer Tlu7DmZmQiYTeGg3zDbj6LgdXvaMlxDoRailddEygVk= allowed-ips 10.23.23.2/32 endpoint 10.0.1.248:54321
+   59  wg set wg0 peer Tlu7DmZmQiYTeGg3zDbj6LgdXvaMlxDoRailddEygVk= allowed-ips 10.23.23.2/32 endpoint 10.0.1.248:54321
+   62  wg
+
+
+# ------------------------------------------------
+# Config files are located in /etc/wireguard/wg0
+# ------------------------------------------------
+
+# ---------- Server Config ----------
+[Interface]
+Address = 10.10.0.1/24 # IPV4 CIDR 
+Address = fd86:ea04:1111::1/64 # IPV6 CIDR 
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; ip6tables -A FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # Add forwarding when VPN is started
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; ip6tables -D FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -D POSTROUTING -o eth0 -j MASQUERADE # Remove forwarding when VPN is shutdown
+PrivateKey = # Put server private key here
+ListenPort = 51820 # Port server should be listening on
+
+[Peer]
+PublicKey = B1Oyq4HertWCcK8YBWETfoHICnFN4+tCfyouxsdhWhs= # Client public key
+AllowedIPs = 10.10.0.2/32, fd86:ea04:1111::2/128 # IPs client can connect as
+
+# ---------- Client Config ----------
+[Interface]
+Address = 10.10.0.2/32 # IPV4 address client is allowed to connect as
+Address = fd86:ea04:1111::2/128 # IPV6 address client is allowed to connect as
+PrivateKey = # Client private key goes here
+DNS = 1.1.1.1 # DNS client should use for resolution (Cloudflare here)
+
+[Peer]
+PublicKey = WI6KwPohbGqsJUZ/FpZup2zGTaBFdeHeJCq2dtT1KBU= # Server public key
+Endpoint = YOUR_SERVER:51820 # Where the server is at + the listening port
+AllowedIPs = 0.0.0.0/0, ::/0 # Forward all traffic to server
+

@@ -7,7 +7,7 @@ resource "aws_security_group" "instance" {
   ingress {
     from_port   = 54321
     to_port     = 54321 
-    protocol    = "tcp"
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
