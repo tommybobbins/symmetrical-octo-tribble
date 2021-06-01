@@ -11,7 +11,9 @@ $ git clone "git@github.com:tommybobbins/symmetrical-octo-tribble.git"
 
 # Usage
 
+```
 $ cd symmtrical-octo-tribble
+```
 
 Edit the variables.tf and modify the region you want the EC2 instance created in. This defaults to North Virginia - us-east-1
 ```
@@ -69,4 +71,10 @@ To destroy the VPN:
 
 ```
 $ terraform destroy --auto-approve
+```
+
+To teardown the connection from the client:
+
+```
+$ sudo ip link del wg0
 ```
