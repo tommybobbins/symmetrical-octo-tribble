@@ -13,7 +13,7 @@ output "project_name" {
 }
 
 
-output  "external_ip" {
+output "external_ip" {
   description = "External IP for the EC2 instance"
-  value = aws_instance.wg.public_ip
+  value       = aws_instance.wg.public_ip
 }

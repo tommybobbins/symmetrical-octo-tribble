@@ -6,7 +6,7 @@ resource "aws_security_group" "instance" {
   # Allow inbound wg requests
   ingress {
     from_port   = 54321
-    to_port     = 54321 
+    to_port     = 54321
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
